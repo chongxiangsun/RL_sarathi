@@ -1,11 +1,7 @@
-<<<<<<< HEAD
+
 # RL_sarathi
-=======
-# Sarathi-Serve
 
-Sarathi-Serve is a high througput and low-latency LLM serving framework. Please refer to our [OSDI'24 paper](https://www.usenix.org/conference/osdi24/presentation/agrawal) for more details. 
 
-## Setup
 
 ### Setup CUDA
 
@@ -14,7 +10,7 @@ Sarathi-Serve has been tested with CUDA 12.3 on H100 and A100 GPUs.
 ### Clone repository
 
 ```sh
-git clone git@github.com:microsoft/sarathi-serve.git
+git 
 ```
 
 ### Create mamba environment
@@ -47,15 +43,11 @@ Refer to readmes in individual folders corresponding to each figure in `osdi-exp
 If you use our work, please consider citing our paper:
 
 ```
-@article{agrawal2024taming,
-  title={Taming Throughput-Latency Tradeoff in LLM Inference with Sarathi-Serve},
-  author={Agrawal, Amey and Kedia, Nitin and Panwar, Ashish and Mohan, Jayashree and Kwatra, Nipun and Gulavani, Bhargav S and Tumanov, Alexey and Ramjee, Ramachandran},
-  journal={Proceedings of 18th USENIX Symposium on Operating Systems Design and Implementation, 2024, Santa Clara},
-  year={2024}
+@article{
 }
 ```
 
 ## Acknowledgment
 
 This repository originally started as a fork of the [vLLM project](https://vllm-project.github.io/). Sarathi-Serve is a research prototype and does not have complete feature parity with open-source vLLM. We have only retained the most critical features and adopted the codebase for faster research iterations.
->>>>>>> master
+
