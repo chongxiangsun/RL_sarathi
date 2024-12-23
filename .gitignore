@@ -200,7 +200,4 @@ high_tail_latency_output
 profiling_outputs
 env_2
 embedding_output/
-examples/RL_results/RL_offline_inference_output/2024-12-23_11-13-12/log_test_RL_episodes_1.txt
-examples/RL_results/RL_offline_inference_output/2024-12-23_11-13-12/log_test_RL_episodes_100.txt
-examples/RL_results/RL_offline_inference_output/2024-12-23_11-13-12/log_test_RL_episodes_150.txt
-examples/RL_results/RL_offline_inference_output/2024-12-23_11-13-12/RL_offline_inference_output/2024-12-23_11-13-12/inference_results.csv
+examples/RL_results/
