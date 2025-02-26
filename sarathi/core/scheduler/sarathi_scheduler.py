@@ -145,24 +145,49 @@ class SarathiScheduler(BaseScheduler):
 
         # 计算 TTFT 的增量
         ttft_increment = valid_ttft[1:] - valid_ttft[:-1]
-        # 对增量进行归一化
-        normalized_increment = (ttft_increment - ttft_increment.min()) / (ttft_increment.max() - ttft_increment.min() + 1e-6)
+        
             
-        #归一化处理
-        def normalize_data(data):
-            min_value = np.min(data)
-            max_value = np.max(data)
-            return (data - min_value) / (max_value - min_value)
+        # 计算 TBT 平均值的增量（即每次平均值的差值）
+        tbts_avg_increment = valid_tbts_avg[1:] - valid_tbts_avg[:-1]
 
-        # 对每个有效数据进行归一化
-        # ttft_normalized = normalize_data(valid_ttft)
-        tbts_avg_normalized = normalize_data(valid_tbts_avg)
-        tbt_variance_normalized = normalize_data(valid_tbt_variance)
-        tbt_std_dev_normalized = normalize_data(valid_tbt_std_dev)
-       
+        # #归一化处理
+        # def normalize_data(data):
+        #     min_value = np.min(data)
+        #     max_value = np.max(data)
+        #     return (data - min_value) / (max_value - min_value)
+
+        
+        # # 对TTFT 增量进行归一化
+        # ttft_increment_normalized = (ttft_increment - ttft_increment.min()) / (ttft_increment.max() - ttft_increment.min() + 1e-6)
+        #  # 对 TBT 平均值差值进行归一化
+        # tbts_avg_increment_normalized = normalize_data(tbts_avg_increment)
+
+        # # 对每个有效数据进行归一化
+        # # ttft_normalized = normalize_data(valid_ttft)
+        # # tbts_avg_normalized = normalize_data(valid_tbts_avg)
+        # tbt_variance_normalized = normalize_data(valid_tbt_variance)
+        # tbt_std_dev_normalized = normalize_data(valid_tbt_std_dev)
+
+        # 归一化处理
+        def normalize_data_with_sign(data):
+            sign = np.sign(data)
+            abs_data = np.abs(data)
+            normalized = (abs_data - np.min(abs_data)) / (np.max(abs_data) - np.min(abs_data) + 1e-6)
+            return normalized * sign  # 保留符号
+
+        # 对 TTFT 增量进行归一化（包括符号）
+        ttft_increment_normalized = normalize_data_with_sign(ttft_increment)
+        
+        # 对 TBT 平均值差值进行归一化（包括符号）
+        tbts_avg_increment_normalized = normalize_data_with_sign(tbts_avg_increment)
+
+        # 对 TBT 方差和标准差进行归一化
+        tbt_variance_normalized = normalize_data_with_sign(valid_tbt_variance)
+        tbt_std_dev_normalized = normalize_data_with_sign(valid_tbt_std_dev)
+
         # 计算每个量的分数
-        score_ttft = normalized_increment - 1
-        score_tbts_avg = tbts_avg_normalized - 1
+        score_ttft = ttft_increment_normalized - 1
+        score_tbts_avg = tbts_avg_increment_normalized - 1
         score_tbt_variance = tbt_variance_normalized - 1
         score_tbt_std_dev = tbt_std_dev_normalized - 1
         
@@ -322,45 +347,15 @@ class SarathiScheduler(BaseScheduler):
 
             
             action, policy = actor.choice_action(flattened_state)
-            # print(f"#####################################################")
-            # print("Selected Action:", action)
-            # print("Selected Policy:", policy)
-            # 每个维度的可能值数
-            # chunk_size_values = 6
-            # low_chunk_size_values = 3
-            # high_chunk_size_values = 3
-            # chunk_schedule_max_tokens_values = 3
-            # chunk_schedule_stages_values = 3
 
-            # 计算动作的每个维度索引
-            # chunk_size_idx = action // (low_chunk_size_values * high_chunk_size_values * chunk_schedule_max_tokens_values * chunk_schedule_stages_values)
-            # action = action % (low_chunk_size_values * high_chunk_size_values * chunk_schedule_max_tokens_values * chunk_schedule_stages_values)
-
-            # low_chunk_size_idx = action // (high_chunk_size_values * chunk_schedule_max_tokens_values * chunk_schedule_stages_values)
-            # action = action % (high_chunk_size_values * chunk_schedule_max_tokens_values * chunk_schedule_stages_values)
-
-            # high_chunk_size_idx = action // (chunk_schedule_max_tokens_values * chunk_schedule_stages_values)
-            # action = action % (chunk_schedule_max_tokens_values * chunk_schedule_stages_values)
-
-            # max_tokens_idx = action // chunk_schedule_stages_values
-            # stages_idx = action % chunk_schedule_stages_values
             
-            # # 定义局部变量
+            # 定义局部变量
             chunk_size_values = [128, 192, 256, 512,1024]
-            # low_chunk_size_values = [32, 64, 128]
-            # high_chunk_size_values = [128, 192, 256]
-            # chunk_schedule_max_tokens_values = [512, 1024, 2048]
-            # chunk_schedule_stages_values = [2, 4, 6]
-            # print(f"action: {action}")
 
             # 新的动作
             # 更新调度器配置
             self.update_SarathiSchedulerConfig(
                 chunk_size_values[action]
-                # low_chunk_size_values[low_chunk_size_idx],
-                # high_chunk_size_values[high_chunk_size_idx],
-                # chunk_schedule_max_tokens_values[max_tokens_idx],
-                # chunk_schedule_stages_values[stages_idx],
             )
 
         # 继续原有逻辑
@@ -496,10 +491,6 @@ class SarathiScheduler(BaseScheduler):
 
             # print(f"Reward: {reward}")
 
-            # Step 8: 存储 (state, action, reward, next_state) 到 S, A, R, nS = [], [], [], [] 
-            # 并累计奖励值到 ReplayBuffer 中的 score
-            # 如果存储次数小于最大次数，才进行存储
-            # if self.store_call_counter <= 80:  # 控制存储次数
             buffer.store(flattened_state, action, reward, flattened_next_state)
             buffer.accumulate_score(reward)
                 # self.store_call_counter += 1

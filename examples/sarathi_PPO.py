@@ -33,7 +33,7 @@ os.makedirs(output_dir, exist_ok=True)  # 确保目录存在
 
 def configure_logging(episodes):
     # 动态构造文件名
-    log_filename = f"/home/srxh03/sarathi_serve_main/examples/RL_results/log_test_RL_episodes_{episodes}.txt"
+    log_filename = f"/home/srxh03/sarathi_serve_main/examples/RL_results/new_RL_episodes_{episodes}.txt"
     
     logging.basicConfig(
         filename=log_filename,
@@ -150,9 +150,7 @@ async def async_inference():
     logging.info(f"推理结果已保存到 {output_dir}/inference_results.csv")
 
     return all_successful  # 返回推理是否成功完成
-
-    
-
+  
 #只获得初始状态空间的长度，状态向量化，将复杂状态字典转换为神经网络可以接受的输入量
 def preprocess_state(state):
     """
@@ -252,7 +250,7 @@ def update_config(episodes, run_count):
 
 
 # 最大运行次数限制
-max_run_count = 5 # 设置运行最大次数
+max_run_count = 10 # 设置运行最大次数
 
 # 主程序
 if __name__ == '__main__':
@@ -338,14 +336,14 @@ if __name__ == '__main__':
     plt.plot(plot_score)
 
     # 使用 f-string 动态插入 episodes 变量
-    plt.savefig(f"task:500_interval:10s_episodes:{episodes}.png")
+    plt.savefig(f"new_task:500_interval:10s_episodes:{episodes}.png")
 
     # 增加运行次数并更新配置
     run_count += 1
 
     # 如果运行次数小于最大限制，则更新训练的回合数并重新运行
     if run_count < max_run_count:
-        episodes += 50  # 增加训练回合数
+        episodes += 2  # 增加训练回合数
         update_config(episodes, run_count)
         print(f"Training run {run_count}/{max_run_count} complete. Starting next run with {episodes} episodes.")
         os.system(f"python {__file__}")  # 重新执行当前脚本
