@@ -22,7 +22,7 @@ class RLManager:
         logging.info("Actor and Critic initialized successfully.")
 
     @staticmethod
-    def get_actor():
+    def get_actor(): 
         """获取 Actor 实例"""
         instance = RLManager()
         if instance.actor is None:
