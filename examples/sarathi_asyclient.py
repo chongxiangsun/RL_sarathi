@@ -18,7 +18,7 @@ from sarathi.config.config import FasterTransformerSchedulerConfig
 
 
 logging.basicConfig(
-    filename="/home/srxh03/sarathi_serve_main/examples/results/log_test_Fast1.txt",
+    filename="/home/srxh03/sarathi_serve_main/examples/results/log_test_vllm3.txt",
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
     force=True
@@ -50,7 +50,7 @@ async def async_inference1():
         dtype="auto",  # 自动数据类型
         seed=42,  # 设置随机种子确保可重复性
         trust_remote_code=True,  # 信任远程代码
-        max_model_len=2024  # 例如，将最大长度从32768减少到1024
+        max_model_len=2048 # 512、
     )
         
     replica_config = ReplicaConfig(
@@ -73,19 +73,19 @@ async def async_inference1():
     # )
 
 
-    # scheduler_config = VllmSchedulerConfig(
-    #     max_num_seqs= 200,
-    #     max_batched_tokens=None
-    # )
+    scheduler_config = VllmSchedulerConfig(
+        max_num_seqs= 200,
+        max_batched_tokens=None
+    )
 
     # scheduler_config = OrcaSchedulerConfig(
-    #       max_num_seqs= 200,
+    #       max_num_seqs= 130,
     # )
 
 
-    scheduler_config = FasterTransformerSchedulerConfig(
-         max_num_seqs= 200
-     )
+    # scheduler_config = FasterTransformerSchedulerConfig(
+    #      max_num_seqs= 130
+    #  )
 
 
 
