@@ -33,7 +33,7 @@ os.makedirs(output_dir, exist_ok=True)  # 确保目录存在
 
 def configure_logging(episodes):
     # 动态构造文件名
-    log_filename = f"/home/srxh03/sarathi_serve_main/examples/RL_results/new_RL_episodes_{episodes}.txt"
+    log_filename = f"/home/srxh03/sarathi_serve_main/examples/RL_results/3.10_new_RL_episodes_{episodes}.txt"
     
     logging.basicConfig(
         filename=log_filename,
@@ -250,7 +250,7 @@ def update_config(episodes, run_count):
 
 
 # 最大运行次数限制
-max_run_count = 10 # 设置运行最大次数
+max_run_count = 1 # 设置运行最大次数
 
 # 主程序
 if __name__ == '__main__':
@@ -336,7 +336,7 @@ if __name__ == '__main__':
     plt.plot(plot_score)
 
     # 使用 f-string 动态插入 episodes 变量
-    plt.savefig(f"new_task:500_interval:10s_episodes:{episodes}.png")
+    plt.savefig(f"3.10_new_task:500_interval:10s_episodes:{episodes}.png")
 
     # 增加运行次数并更新配置
     run_count += 1

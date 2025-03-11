@@ -150,24 +150,7 @@ class SarathiScheduler(BaseScheduler):
         # 计算 TBT 平均值的增量（即每次平均值的差值）
         tbts_avg_increment = valid_tbts_avg[1:] - valid_tbts_avg[:-1]
 
-        # #归一化处理
-        # def normalize_data(data):
-        #     min_value = np.min(data)
-        #     max_value = np.max(data)
-        #     return (data - min_value) / (max_value - min_value)
-
         
-        # # 对TTFT 增量进行归一化
-        # ttft_increment_normalized = (ttft_increment - ttft_increment.min()) / (ttft_increment.max() - ttft_increment.min() + 1e-6)
-        #  # 对 TBT 平均值差值进行归一化
-        # tbts_avg_increment_normalized = normalize_data(tbts_avg_increment)
-
-        # # 对每个有效数据进行归一化
-        # # ttft_normalized = normalize_data(valid_ttft)
-        # # tbts_avg_normalized = normalize_data(valid_tbts_avg)
-        # tbt_variance_normalized = normalize_data(valid_tbt_variance)
-        # tbt_std_dev_normalized = normalize_data(valid_tbt_std_dev)
-
         # 归一化处理
         def normalize_data_with_sign(data):
             sign = np.sign(data)

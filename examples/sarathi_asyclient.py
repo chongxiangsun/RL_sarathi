@@ -12,9 +12,13 @@ from sarathi.engine.async_llm_engine import AsyncLLMEngine
 
 import logging
 
-from sarathi.config.config import VllmSchedulerConfig
+from sarathi.config.config import CacheConfig, VllmSchedulerConfig
+from sarathi.config.config import OrcaSchedulerConfig
+from sarathi.config.config import FasterTransformerSchedulerConfig
+
+
 logging.basicConfig(
-    filename="/home/srxh03/sarathi-serve-main/examples/results/log_test_chunk_new.txt",
+    filename="/home/srxh03/sarathi_serve_main/examples/results/log_test_Fast1.txt",
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
     force=True
@@ -46,7 +50,7 @@ async def async_inference1():
         dtype="auto",  # 自动数据类型
         seed=42,  # 设置随机种子确保可重复性
         trust_remote_code=True,  # 信任远程代码
-        max_model_len=2048  # 例如，将最大长度从32768减少到1024
+        max_model_len=2024  # 例如，将最大长度从32768减少到1024
     )
         
     replica_config = ReplicaConfig(
@@ -69,10 +73,20 @@ async def async_inference1():
     # )
 
 
-    scheduler_config = VllmSchedulerConfig(
-        max_num_seqs= 200,
-        max_batched_tokens=None
-    )
+    # scheduler_config = VllmSchedulerConfig(
+    #     max_num_seqs= 200,
+    #     max_batched_tokens=None
+    # )
+
+    # scheduler_config = OrcaSchedulerConfig(
+    #       max_num_seqs= 200,
+    # )
+
+
+    scheduler_config = FasterTransformerSchedulerConfig(
+         max_num_seqs= 200
+     )
+
 
 
     metrics_config = MetricsConfig(
@@ -80,7 +94,7 @@ async def async_inference1():
         enable_chrome_trace=True,
     )
 
-    
+
 
     system_config = SystemConfig(
         replica_config=replica_config,
@@ -93,7 +107,7 @@ async def async_inference1():
     engine = AsyncLLMEngine.from_system_config(system_config)
 
     # 从CSV文件中读取数据集，包含一列prompt，限制读取前500行
-    df = pd.read_csv("/home/srxh03/sarathi-serve-main/examples/datasets/test_10000.csv", header=None, names=["prompt"], nrows=500)
+    df = pd.read_csv("/home/srxh03/sarathi_serve_main/examples/datasets/test_10000.csv", header=None, names=["prompt"], nrows=500)
 
     # 记录推理开始的全局时间
     global_start_time = time.time()
